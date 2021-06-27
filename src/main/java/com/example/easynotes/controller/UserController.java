@@ -1,18 +1,15 @@
 package com.example.easynotes.controller;
 
-import com.example.easynotes.dto.UserDTO;
-import com.example.easynotes.exception.ResourceNotFoundException;
-import com.example.easynotes.model.Note;
-import com.example.easynotes.model.User;
-import com.example.easynotes.repository.NoteRepository;
-import com.example.easynotes.repository.UserRepository;
-import org.modelmapper.ModelMapper;
+import com.example.easynotes.dto.UserRequestDTO;
+import com.example.easynotes.dto.UserResponseDTO;
+import com.example.easynotes.dto.UserResponseWithCantNotesDTO;
+import com.example.easynotes.dto.UserResponseWithNotesDTO;
+import com.example.easynotes.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,52 +19,56 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-    @Autowired
-    UserRepository noteRepository;
+    UserService userService;
 
     @Autowired
-    ModelMapper modelMapper;
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @GetMapping("/users")
-    public List<UserDTO> getAllUsers() {
-        List<UserDTO> list = new ArrayList<>();
-        modelMapper.map(noteRepository.findAll(), list);
-        return list;
+    public List<UserResponseDTO> getAllUsers() {
+        return userService.getAllUsers();
     }
 
-    @PostMapping("/users")
-    public UserDTO createUSer(@Valid @RequestBody UserDTO userDTO) {
-        User user = modelMapper.map(userDTO, User.class);
-        return modelMapper.map(noteRepository.save(user), UserDTO.class);
+    @GetMapping("/users/notes")
+    public List<UserResponseWithNotesDTO> getAllUsersWithNotes() {
+        return userService.getAllUsersWithNotes();
     }
 
-    @GetMapping("/users/{id}")
-    public UserDTO getNoteById(@PathVariable(value = "id") Long userId) {
-        User user = noteRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", userId));
-
-        return modelMapper.map(user, UserDTO.class);
+    @GetMapping("/users/notes/cant")
+    public List<UserResponseWithCantNotesDTO> getAllUsersWithCantNotes() {
+        return userService.getAllUsersWithCantNotes();
     }
 
-    @PutMapping("/users/{id}")
-    public UserDTO updateNote(@PathVariable(value = "id") Long noteId,
-                                           @Valid @RequestBody UserDTO userDTO) {
-        User user = noteRepository.findById(noteId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", noteId));
-
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
-
-        return modelMapper.map(noteRepository.save(user), UserDTO.class);
+    @PostMapping("/user")
+    public UserResponseDTO createUSer(@Valid @RequestBody UserRequestDTO userRequestDTO) {
+        return userService.createUSer(userRequestDTO);
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteNote(@PathVariable(value = "id") Long noteId) {
-        User note = noteRepository.findById(noteId)
-                .orElseThrow(() -> new ResourceNotFoundException("User", "id", noteId));
+    @GetMapping("/user/{id}")
+    public UserResponseDTO getUserById(@PathVariable(value = "id") Long userId) {
+        return userService.getUserById(userId);
+    }
 
-        noteRepository.delete(note);
+    @GetMapping("/user/{id}/notes")
+    public UserResponseWithNotesDTO getUserWithNotesById(@PathVariable(value = "id") Long userId) {
+        return userService.getUserWithNotesById(userId);
+    }
 
-        return ResponseEntity.ok().build();
+    @GetMapping("/user/{id}/notes/cant")
+    public UserResponseWithCantNotesDTO getUserWithCantNotesById(@PathVariable(value = "id") Long userId) {
+        return userService.getUserWithCantNotesById(userId);
+    }
+
+    @PutMapping("/user/{id}")
+    public UserResponseDTO updateUser(@PathVariable(value = "id") Long userId,
+                                     @Valid @RequestBody UserRequestDTO userRequestDTO) {
+        return userService.updateUser(userId, userRequestDTO);
+    }
+
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long userId) {
+        return userService.deleteUser(userId);
     }
 }

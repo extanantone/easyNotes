@@ -27,7 +27,6 @@ public class Note {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference
     private User author;
 
     private String title;

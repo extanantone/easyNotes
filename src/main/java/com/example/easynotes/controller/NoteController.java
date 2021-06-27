@@ -1,19 +1,14 @@
 package com.example.easynotes.controller;
 
-import com.example.easynotes.dto.NoteDTO;
-import com.example.easynotes.exception.ResourceNotFoundException;
+import com.example.easynotes.dto.NoteRequestDTO;
+import com.example.easynotes.dto.NoteResponseWithAuthorDTO;
 import com.example.easynotes.model.Note;
-import com.example.easynotes.model.User;
-import com.example.easynotes.repository.NoteRepository;
-import com.example.easynotes.repository.UserRepository;
-import org.modelmapper.ModelMapper;
+import com.example.easynotes.service.NoteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,65 +18,36 @@ import java.util.List;
 @RequestMapping("/api")
 public class NoteController {
 
-    @Autowired
-    NoteRepository noteRepository;
+    NoteService noteService;
 
     @Autowired
-    ModelMapper modelMapper;
-
-    @Autowired
-    UserRepository userRepository;
-
-    @GetMapping("/notes")
-    public List<NoteDTO> getAllNotes() {
-        List<NoteDTO> list = new ArrayList<>();
-        modelMapper.map(noteRepository.findAll(), list);
-        return list;
+    NoteController(NoteService noteService) {
+        this.noteService = noteService;
     }
 
-    @PostMapping("/notes")
-    public NoteDTO createNote(@Valid @RequestBody NoteDTO noteDTO) {
-        Note note = modelMapper.map(noteDTO, Note.class);
-
-        //!FIXME
-        note.setCreatedAt(new Date());
-        note.setUpdatedAt(new Date());
-
-        Note noteReq = noteRepository.save(note);
-        return modelMapper.map(noteReq, NoteDTO.class);
+    @GetMapping("/notes/all")
+    public List<NoteResponseWithAuthorDTO> getAllNotes() {
+        return noteService.getAllNotes();
     }
 
-    @GetMapping("/notes/{id}")
-    public NoteDTO getNoteById(@PathVariable(value = "id") Long noteId) {
-        Note note = noteRepository.findById(noteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
-        return modelMapper.map(note, NoteDTO.class);
+    @PostMapping("/note")
+    public NoteResponseWithAuthorDTO createNote(@Valid @RequestBody NoteRequestDTO noteRequestDTO) {
+        return noteService.createNote(noteRequestDTO);
     }
 
-    @PutMapping("/notes/{id}")
-    public NoteDTO updateNote(@PathVariable(value = "id") Long noteId,
-                                           @Valid @RequestBody Note noteDetailsDTO) {
-
-        Note note = noteRepository.findById(noteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
-
-        note.setTitle(noteDetailsDTO.getTitle());
-        note.setContent(noteDetailsDTO.getContent());
-        note.setAuthor(noteDetailsDTO.getAuthor());
-
-        Note updatedNote = noteRepository.save(note);
-        return modelMapper.map(updatedNote, NoteDTO.class);
+    @GetMapping("/note/{id}")
+    public NoteResponseWithAuthorDTO getNoteById(@PathVariable(value = "id") Long noteId) {
+        return noteService.getNoteById(noteId);
     }
 
-    @DeleteMapping("/notes/{id}")
+    @PutMapping("/note/{id}")
+    public NoteResponseWithAuthorDTO updateNote(@PathVariable(value = "id") Long noteId,
+                                                @Valid @RequestBody Note noteDetailsDTO) {
+        return noteService.updateNote(noteId, noteDetailsDTO);
+    }
+
+    @DeleteMapping("/note/{id}")
     public ResponseEntity<?> deleteNote(@PathVariable(value = "id") Long noteId) {
-        Note note = noteRepository.findById(noteId)
-                .orElseThrow(() -> new ResourceNotFoundException("Note", "id", noteId));
-
-        noteRepository.delete(note);
-
-        return ResponseEntity.ok().build();
+        return noteService.deleteNote(noteId);
     }
 }
-
-
