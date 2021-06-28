@@ -22,10 +22,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    @Column(name = "first_name", length = 40)
+    @Column(name = "first_name", length = 40, nullable = false)
     private String firstName;
 
-    @Column(name = "last_name", length = 40)
+    @Column(name = "last_name", length = 40, nullable = false)
     private String lastName;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY)

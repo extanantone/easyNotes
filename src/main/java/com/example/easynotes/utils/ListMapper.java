@@ -24,7 +24,7 @@ public class ListMapper {
         this.modelMapper = modelMapper;
     }
 
-    public <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
+    public <T, S> List<S> mapList(List<T> source, Class<S> targetClass) {
         return source
                 .stream()
                 .map(element -> modelMapper.map(element, targetClass))

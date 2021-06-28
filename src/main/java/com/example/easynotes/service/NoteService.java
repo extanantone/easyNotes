@@ -2,12 +2,15 @@ package com.example.easynotes.service;
 
 import com.example.easynotes.dto.NoteRequestDTO;
 import com.example.easynotes.dto.NoteResponseWithAuthorDTO;
+import com.example.easynotes.dto.UserResponseWithCantNotesDTO;
 import com.example.easynotes.exception.ResourceNotFoundException;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.model.User;
 import com.example.easynotes.repository.NoteRepository;
 import com.example.easynotes.repository.UserRepository;
 import com.example.easynotes.utils.ListMapper;
+import org.modelmapper.AbstractConverter;
+import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by rajeevkumarsingh on 27/06/17.
@@ -38,29 +42,43 @@ public class NoteService {
         this.listMapper = listMapper;
 
         // Sikpping map Note author from NoteRequestDTO (this class only have author_id)
-        modelMapper.addMappings(new PropertyMap<NoteRequestDTO, Note>() {
+        /*modelMapper.addMappings(new PropertyMap<NoteRequestDTO, Note>() {
             @Override
             protected void configure() {
                 skip(destination.getAuthor());
             }
-        });
+        });*/
+
+
+        Converter<Long, User> authorIdToUserConverter = new AbstractConverter<Long, User>() {
+            @Override
+            protected User convert(Long authorId) throws ResourceNotFoundException {
+                return userRepository.findById(authorId)
+                        .orElseThrow(() -> new ResourceNotFoundException("Author", "id", authorId));
+            }
+        };
+        //Load converter to modelMapper used when we want convert from User to UserResponseWithCantNotesDTO
+        modelMapper.typeMap(NoteRequestDTO.class, Note.class).addMappings( (mapper) ->
+                mapper.using(authorIdToUserConverter)
+                        .map(NoteRequestDTO::getAuthorId, Note::setAuthor)
+        );
 
         this.modelMapper = modelMapper;
     }
 
     public List<NoteResponseWithAuthorDTO> getAllNotes() {
-        List<Note> note = noteRepository.findAll();
-        return listMapper.mapList(note, NoteResponseWithAuthorDTO.class);
+        List<Note> notes = noteRepository.findAll();
+        return listMapper.mapList(notes, NoteResponseWithAuthorDTO.class);
     }
 
     public NoteResponseWithAuthorDTO createNote(NoteRequestDTO noteRequestDTO) {
         // Create new note
         Note note = modelMapper.map(noteRequestDTO, Note.class);
         // Find user with id from noteDTO
-        User user = userRepository.findById(noteRequestDTO.getAuthorId())
-                .orElseThrow(() -> new ResourceNotFoundException("Author", "id", noteRequestDTO.getAuthorId()));
+        //User user = userRepository.findById(noteRequestDTO.getAuthorId())
+                //.orElseThrow(() -> new ResourceNotFoundException("Author", "id", noteRequestDTO.getAuthorId()));
         // Set author to the new note
-        note.setAuthor(user);
+        //note.setAuthor(user);
 
         //!FIXME
         note.setCreatedAt(new Date());
