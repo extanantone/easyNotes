@@ -1,5 +1,6 @@
 package com.example.easynotes.service;
 
+import com.example.easynotes.dto.NoteResponseWithCantLikesDTO;
 import com.example.easynotes.dto.ThankDTO;
 import com.example.easynotes.dto.NoteRequestDTO;
 import com.example.easynotes.dto.NoteResponseWithAuthorDTO;
@@ -23,4 +24,7 @@ public interface INoteService {
     void addReviser(Long id, Long authorId);
 
     Set<ThankDTO> getThanks(Long id);
+
+    List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year);
+
 }

@@ -20,7 +20,6 @@ public class Note {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
     private User author;
 
     private String title;

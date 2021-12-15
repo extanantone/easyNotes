@@ -27,7 +27,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //
 
 
-    @Query("Select new map(user.firstName as name, size(user.authorNotes) as notes ) from User user where user.lastName like %:lastName%")
+    //@Query("Select new map(user.firstName as name, size(user.authorNotes) as notes ) from User user where user.lastName like %:lastName%")
+
+    @Query("from User u where u.lastName like %:lastName%")
     List<?> findUserByLastNameLike(@Param("lastName") String lastName);
 
     @Query( "select distinct user " +
@@ -48,7 +50,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
 
-    // NOTA: TOP 5 DE NOTAS CON MAS LIKES SEGUN AÑO
+
 
     //    // Ejemplo con like
     //    List<User> findUserByLastNameLikeAndFirstNameLike(String lastName, String firstName);

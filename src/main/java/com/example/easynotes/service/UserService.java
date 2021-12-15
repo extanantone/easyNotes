@@ -175,10 +175,6 @@ public class UserService implements IUserService {
 //        return listMapper.mapList(users, UserResponseDTO.class);
 //    }
 
-    public List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year){
-        List<Note> notesMoreThanked = null;
-        return null;
-    }
 
 
 

@@ -61,6 +61,6 @@ public class NoteController {
 
     @GetMapping("threeMostThanked/{year}")
     public List<NoteResponseWithCantLikesDTO> getNotesWithLikesByYear(@PathVariable(value = "year") int year){
-        return null;
+        return noteService.getThreeMoreThankedNotes(year);
     }
 }

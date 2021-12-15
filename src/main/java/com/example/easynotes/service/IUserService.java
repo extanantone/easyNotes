@@ -38,7 +38,6 @@ public interface IUserService {
 
     // NOTA: Metodos de Jean para HQL
 
-    List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year);
 
     UserResponseDTO getUserById(Integer id);
 
