@@ -1,74 +1,100 @@
 package com.example.easynotes.controller;
 
-import com.example.easynotes.dto.UserRequestDTO;
-import com.example.easynotes.dto.UserResponseDTO;
-import com.example.easynotes.dto.UserResponseWithCantNotesDTO;
-import com.example.easynotes.dto.UserResponseWithNotesDTO;
-import com.example.easynotes.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.easynotes.dto.*;
+import com.example.easynotes.service.IUserService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
-/**
- * Created by rajeevkumarsingh on 27/06/17.
- */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user")
 public class UserController {
 
-    UserService userService;
+    IUserService userService;
 
-    @Autowired
-    UserController(UserService userService) {
+    UserController(IUserService userService) {
         this.userService = userService;
     }
 
-    @GetMapping("/users")
+    @GetMapping("/all")
     public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
     }
 
-    @GetMapping("/users/notes")
+    @GetMapping("/all/notes")
     public List<UserResponseWithNotesDTO> getAllUsersWithNotes() {
         return userService.getAllUsersWithNotes();
     }
 
-    @GetMapping("/users/notes/cant")
+    @GetMapping("/all/notes/cant")
     public List<UserResponseWithCantNotesDTO> getAllUsersWithCantNotes() {
         return userService.getAllUsersWithCantNotes();
     }
 
-    @PostMapping("/user")
+    @PostMapping()
     public UserResponseDTO createUSer(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.createUSer(userRequestDTO);
     }
 
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id}")
     public UserResponseDTO getUserById(@PathVariable(value = "id") Long userId) {
         return userService.getUserById(userId);
     }
 
-    @GetMapping("/user/{id}/notes")
+    @GetMapping("/{id}/notes")
     public UserResponseWithNotesDTO getUserWithNotesById(@PathVariable(value = "id") Long userId) {
         return userService.getUserWithNotesById(userId);
     }
 
-    @GetMapping("/user/{id}/notes/cant")
+    @GetMapping("like/lastName/{lastName}")
+    public List<UserResponseDTO> getUsersLastNameLike(@PathVariable(value = "lastName") String lastName) {
+        return userService.getUsersLastNameLike(lastName);
+    }
+
+    @GetMapping("/like/notes/title/{title}")
+    public @ResponseBody List<UserResponseWithNotesDTO> fetchResult(@PathVariable("title") String title) {
+        return userService.getUsersByNoteTitleLike(title);
+    }
+
+    @GetMapping("/afterDate/notes/createdAt/{date}")
+    public @ResponseBody List<UserResponseWithNotesDTO> fetchResult(@PathVariable("date") @DateTimeFormat(pattern="dd-MM-yyyy") Date date) {
+        return userService.getUsersByNoteCreatedAfterDate(date);
+    }
+
+    @PostMapping("/{id}/thank!/{noteId}")
+    public ResponseEntity<?> createGreat(@PathVariable(value = "id") Long userId,
+                                         @PathVariable(value = "noteId") Long noteId) {
+        userService.createThank(userId, noteId);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/notes/cant")
     public UserResponseWithCantNotesDTO getUserWithCantNotesById(@PathVariable(value = "id") Long userId) {
         return userService.getUserWithCantNotesById(userId);
     }
 
-    @PutMapping("/user/{id}")
+    @PutMapping("/{id}")
     public UserResponseDTO updateUser(@PathVariable(value = "id") Long userId,
                                      @Valid @RequestBody UserRequestDTO userRequestDTO) {
         return userService.updateUser(userId, userRequestDTO);
     }
 
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable(value = "id") Long userId) {
-        return userService.deleteUser(userId);
+        userService.deleteUser(userId);
+        return ResponseEntity.ok().build();
     }
+
+
+    //Metodos de Jean para HQL
+
+//    @GetMapping("like/{lastName}/{firstName}")
+//    public List<UserResponseDTO> getUsersLastNameLikeAndFirstNameLike(@PathVariable(value = "lastName") String lastName,
+//                                                                      @PathVariable(value = "firstName") String firstName) {
+//        return userService.getUsersLastNameLikeAndFirstNameLike(lastName, firstName);
+//    }
 }
