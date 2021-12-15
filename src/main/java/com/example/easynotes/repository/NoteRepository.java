@@ -15,6 +15,7 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
 
     @Query("FROM Note n " +
             "WHERE YEAR(n.createdAt) = :year " +
-            "ORDER BY SIZE(n.thanks) ASC ")
+            "group by n.id " +
+            "ORDER BY SIZE(n.thanks) DESC ")
     public List<Note> findTopThreeNotesMostThankedByDate(@Param("year") int year);
 }
