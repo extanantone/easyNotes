@@ -7,7 +7,4 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper=true)
 @AllArgsConstructor
-public class UserRequestDTO extends UserDTO {
-
-
-}
+public class UserRequestDTO extends UserDTO { }

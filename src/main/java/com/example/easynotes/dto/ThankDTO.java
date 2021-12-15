@@ -1,21 +1,25 @@
 package com.example.easynotes.dto;
 
+import com.example.easynotes.model.Note;
+import com.example.easynotes.model.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import java.util.Date;
 
 @Data
-// Used when extends from other DTO
-// link: https://stackoverflow.com/questions/38572566/warning-equals-hashcode-on-data-annotation-lombok-with-inheritance
-@EqualsAndHashCode(callSuper=true)
 @AllArgsConstructor
 @NoArgsConstructor
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class NoteResponseDTO extends NoteDTO {
+public class ThankDTO {
 
-    private Long id;
+    Long noteId;
+
+    UserResponseDTO user;
+
+    private Date createdAt;
 
 }
