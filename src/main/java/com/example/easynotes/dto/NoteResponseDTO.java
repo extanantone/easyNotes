@@ -17,5 +17,4 @@ import lombok.NoArgsConstructor;
 public class NoteResponseDTO extends NoteDTO {
 
     private Long id;
-
 }

@@ -1,9 +1,6 @@
 package com.example.easynotes.service;
 
-import com.example.easynotes.dto.ThankDTO;
-import com.example.easynotes.dto.NoteRequestDTO;
-import com.example.easynotes.dto.NoteResponseWithAuthorDTO;
-import com.example.easynotes.dto.UserResponseWithCantNotesDTO;
+import com.example.easynotes.dto.*;
 import com.example.easynotes.exception.ResourceNotFoundException;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.model.Thank;
@@ -15,6 +12,7 @@ import org.modelmapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -84,8 +82,8 @@ public class NoteService implements INoteService {
         Note note = modelMapper.map(noteRequestDTO, Note.class);
 
         //!FIXME
-        note.setCreatedAt(new Date());
-        note.setUpdatedAt(new Date());
+        note.setCreatedAt(LocalDate.now());
+        note.setUpdatedAt(LocalDate.now());
 
 
         Note noteReq = noteRepository.save(note);
@@ -147,6 +145,16 @@ public class NoteService implements INoteService {
                 .orElseThrow( () -> new ResourceNotFoundException("Note", "id", id) );
 
         return listMapper.mapSet( note.getThanks(), ThankDTO.class );
+    }
+
+    public List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year){
+        var noteFirst   = new NoteResponseWithCantLikesDTO(1L, 5);
+        var noteSecond  = new NoteResponseWithCantLikesDTO(29L, 4);
+        var noteThird   = new NoteResponseWithCantLikesDTO(14L, 3);
+
+        return List.of(noteFirst, noteSecond, noteThird);
+  /*      List<Note> notesMoreThanked = null;
+        return null;*/
     }
 }
 

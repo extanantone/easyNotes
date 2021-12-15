@@ -27,7 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     //
 
 
-    @Query("Select new map(firstName as name, size(User.authorNotes) as notas) from User user where user.lastName like %:lastName%")
+    @Query("Select new map(user.firstName as name, size(user.authorNotes) as notes ) from User user where user.lastName like %:lastName% and user.thanks is not empty")
     List<Map<String, Integer>> findUserByLastNameLike(@Param("lastName") String lastName);
 
     @Query( "select distinct user " +

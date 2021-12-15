@@ -4,6 +4,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -31,9 +32,9 @@ public class Thank {
     User user;
 
     @Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date createdAt = new Date();
+    private LocalDate createdAt;
 
     public Thank(User user, Note note) {
         this.setUser(user);

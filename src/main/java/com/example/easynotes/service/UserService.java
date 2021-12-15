@@ -175,10 +175,7 @@ public class UserService implements IUserService {
 //        return listMapper.mapList(users, UserResponseDTO.class);
 //    }
 
-    public List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year){
-        List<Note> notesMoreThanked = null;
-        return null;
-    }
+
 
 
 
@@ -188,7 +185,6 @@ public class UserService implements IUserService {
         User user = (User) entityManager.createQuery("from user where id = ?1")
                 .setParameter(1, id)
                 .getSingleResult();
-
         return modelMapper.map(user, UserResponseDTO.class);
     }
 

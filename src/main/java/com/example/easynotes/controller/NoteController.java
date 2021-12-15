@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/note")
+@RequestMapping("api/note")
 public class NoteController {
 
     INoteService noteService;
@@ -61,6 +61,7 @@ public class NoteController {
 
     @GetMapping("threeMostThanked/{year}")
     public List<NoteResponseWithCantLikesDTO> getNotesWithLikesByYear(@PathVariable(value = "year") int year){
-        return null;
+        List<NoteResponseWithCantLikesDTO> a = noteService.getThreeMoreThankedNotes(year);
+        return a;
     }
 }
