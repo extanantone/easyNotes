@@ -136,7 +136,7 @@ public class UserService implements IUserService {
 
     @Override
     public List<UserResponseDTO> getUsersLastNameLike(String lastName) {
-        List<Map<String, Integer>> users =  userRepository.findUserByLastNameLike(lastName);
+        List<?> users =  userRepository.findUserByLastNameLike(lastName);
 
         return null;
     }
