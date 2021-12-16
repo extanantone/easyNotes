@@ -176,15 +176,12 @@ public class UserService implements IUserService {
 //    }
 
 
-
-
     // NOTA: MALA PRACTICA 1 (entityManager)
     @Override
     public UserResponseDTO getUserById(Integer id) {
         User user = (User) entityManager.createQuery("from user where id = ?1")
                 .setParameter(1, id)
                 .getSingleResult();
-
         return modelMapper.map(user, UserResponseDTO.class);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,6 +21,7 @@ public class Note {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "author_id")
     private User author;
 
     private String title;
@@ -33,13 +35,13 @@ public class Note {
     Set<Thank> thanks;
 
     @Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private Date createdAt;
+    private LocalDate createdAt;
 
     @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
+    //@Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
-    private Date updatedAt;
+    private LocalDate updatedAt;
 
 }

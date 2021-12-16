@@ -12,9 +12,9 @@ import org.modelmapper.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class NoteService implements INoteService {
@@ -81,8 +81,8 @@ public class NoteService implements INoteService {
         Note note = modelMapper.map(noteRequestDTO, Note.class);
 
         //!FIXME
-        note.setCreatedAt(new Date());
-        note.setUpdatedAt(new Date());
+        note.setCreatedAt(LocalDate.now());
+        note.setUpdatedAt(LocalDate.now());
 
 
         Note noteReq = noteRepository.save(note);
@@ -147,18 +147,18 @@ public class NoteService implements INoteService {
     }
 
     public List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year){
-        List<Note> notesMoreThanked = noteRepository.findTopThreeNotesMostThankedByDate(year)
-                .subList(0,3);
-        List<NoteResponseWithCantLikesDTO> notesWithCantLikes =
-                listMapper.mapList(notesMoreThanked, NoteResponseWithCantLikesDTO.class);
 
-        for(int i = 0; i < notesMoreThanked.size() ; i++){
-            notesWithCantLikes.get(i).setCantThanks(notesMoreThanked.get(i).getThanks().size());
-        }
-
-        return notesWithCantLikes;
+        List<HashMap<String, Object>> notesMoreThanked = noteRepository.findTopThreeNotesMostThankedByDate(year);
+        return notesMoreThanked.stream()
+                .limit(3L)
+                .map( m -> {
+                    Long id = (Long) m.get("id");
+                    Long cant = (Long) m.get("cant_thanks");
+                    return new NoteResponseWithCantLikesDTO(id, Math.toIntExact(cant) );
+                }
+                )
+                .collect(Collectors.toList());
     }
-
 }
 
 

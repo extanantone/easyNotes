@@ -26,5 +26,4 @@ public interface INoteService {
     Set<ThankDTO> getThanks(Long id);
 
     List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year);
-
 }

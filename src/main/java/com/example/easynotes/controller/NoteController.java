@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @RestController
-@RequestMapping("/api/note")
+@RequestMapping("api/note")
 public class NoteController {
 
     INoteService noteService;

@@ -38,7 +38,6 @@ public interface IUserService {
 
     // NOTA: Metodos de Jean para HQL
 
-
     UserResponseDTO getUserById(Integer id);
 
     UserResponseDTO getUserByLastName(String lastName);
