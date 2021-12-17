@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface NoteRepository extends JpaRepository<Note, Long> {
@@ -24,6 +25,12 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "where YEAR(thank.createdAt) = :year " +
             "group by note.id order by cant_thanks desc")
     List<HashMap<String, Object>> findTopThreeNotesMostThankedByDate(int year);
+
+
+    @Query("SELECT new map(note.id as id, COUNT(note.id) as cant_thanks ) " +
+            "from Note note inner join note.thanks as thank " +
+            "where id = :id " )
+    HashMap<String, Object> findByIdContaining(long id);
 }
 /*
 note    thank
