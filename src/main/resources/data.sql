@@ -1,5 +1,5 @@
-INSERT INTO `easy_note`.`user`
-(`id`,`first_name`,`last_name`)
+INSERT INTO `user`
+    (`id`,`first_name`,`last_name`)
 VALUES
     (1, 'user1','last1'),
     (2, 'user2','last2'),
@@ -11,8 +11,8 @@ VALUES
     (8, 'user8','last8');
 
 
-INSERT INTO `easy_note`.`note`
-(`id`,`content`,`created_at`,`title`,`updated_at`,`author_id`)
+INSERT INTO `note`
+    (`id`,`content`,`created_at`,`title`,`updated_at`,`author_id`)
 VALUES
     (0,'Si el tiempo no se me pasa más cuando se corta la luz1','2019-12-06','Que hacemos1?','2021-12-06',1),
     (1,'Si el tiempo no se me pasa más cuando se corta la luz2','2020-12-06','Que hacemos2?','2021-12-06',1),
@@ -22,8 +22,8 @@ VALUES
     (37,'Si el tiempo no se me pasa más cuando se corta la luz5','2021-12-06','Que hacemos5?','2021-12-06',1);
 
 
-INSERT INTO `easy_note`.`thank`
-(`author_id`,`note_id`,`created_at`)
+INSERT INTO `thank`
+    (`note_id`,`user_id`,`created_at`)
 VALUES
     (0,2,'2019-12-16'),
     (0,3,'2019-12-26'),
@@ -39,17 +39,25 @@ VALUES
     (1,5,'2020-12-06'),
     (1,6,'2020-12-06'),
 
+    (1,7,'2021-12-06'),
+
     (14,2,'2020-12-06'),
     (14,3,'2020-12-06'),
     (14,4,'2020-12-06'),
+
+    (14,5,'2021-12-06'),
 
     (29,2,'2020-12-06'),
     (29,4,'2020-12-06'),
     (29,3,'2020-12-06'),
     (29,5,'2020-12-06'),
 
+    (29,6,'2021-12-06'),
+
     (30,2,'2020-12-06'),
     (30,3,'2020-12-06'),
+
+    (30,4,'2021-12-06'),
 
 
     (37,2,'2021-12-06'),

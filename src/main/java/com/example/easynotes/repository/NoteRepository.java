@@ -25,3 +25,29 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "group by note.id order by cant_thanks desc")
     List<HashMap<String, Object>> findTopThreeNotesMostThankedByDate(int year);
 }
+/*
+note    thank
+id      note_id
+
+2, h2,  2, 3, 2021 v  *2
+2, h2,  2, 9, 2021 v  *2
+2, h2,  2,11, 2019 x
+
+1, h1,  1, 3, 2011 x
+1, h1,  1, 5, 2021 v  *1
+1, h1,  1, 7, 2021 v  *1
+1, h1,  1,11, 2021 v  *1
+1, h1,  1, 9, 2019 x
+
+3, h3,  3, 9, 2021 v  *3
+
+        id           cant_thanks
+        2            2
+        1            3
+        3            1
+
+        id           cant_thanks
+        1            3
+        2            2
+        3            1
+*/
