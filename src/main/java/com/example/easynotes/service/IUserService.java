@@ -42,6 +42,8 @@ public interface IUserService {
 
     UserResponseDTO getUserByLastName(String lastName);
 
+    UserCategoryDTO getCatregory (Long idUser);
+
     //  List<UserResponseDTO> getUsersLastNameLikeAndFirstNameLike(String lastName, String firstName);
 
 }

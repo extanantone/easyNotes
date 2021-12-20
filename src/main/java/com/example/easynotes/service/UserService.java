@@ -18,7 +18,10 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+//import java.sql.Date;
 import java.util.stream.Collectors;
 
 
@@ -194,5 +197,60 @@ public class UserService implements IUserService {
 
         User user = query.getResultList().get(1);
         return modelMapper.map(user, UserResponseDTO.class);
+    }
+
+
+    @Override
+    public UserCategoryDTO getCatregory(Long idUser) {
+
+        List<LocalDate> dates = noteRepository.findNotByUserNoteDate(idUser);
+
+        LocalDate actual = LocalDate.now();
+
+       int cont = 0;
+
+       LocalDate primeraFecha= null;
+       int diadelaSemana;
+        for (LocalDate date : dates) {
+
+            if(primeraFecha==null){
+                primeraFecha= date;
+                        continue;
+            }
+            if(primeraFecha.minusDays(1).equals(date)){
+                primeraFecha = date;
+                cont++;
+            }else{
+
+            }
+
+            if(cont == 2){
+                break;
+            }
+        }
+
+        if(cont==2){
+            return new UserCategoryDTO(idUser,UserCategoryDTO.cat.PublicadorDioario.toString());
+        }
+
+        primeraFecha = null;
+        cont=0;
+
+
+        for (LocalDate d: dates) {
+            if(primeraFecha==null){
+                primeraFecha= d;
+                continue;
+            }
+
+
+        }
+
+
+
+
+
+        return new UserCategoryDTO();
+
     }
 }
