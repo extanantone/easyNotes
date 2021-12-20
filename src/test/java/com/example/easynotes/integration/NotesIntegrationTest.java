@@ -102,4 +102,23 @@ public class NotesIntegrationTest {
 
 
     }
+
+    @Test
+    void testGetTypeNoteNormalCorrectly() throws Exception {
+
+        Long id = 4L;
+        NoteResponseWithTypeOfLikes noteType = new NoteResponseWithTypeOfLikes(id,0,"Normal");
+        String payloadJson = writer.writeValueAsString(noteType);
+
+        mockMvc.perform(get("/api/note/noteType/" + id) )
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(payloadJson),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+
+
+    }
 }
