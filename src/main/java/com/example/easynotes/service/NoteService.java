@@ -159,6 +159,16 @@ public class NoteService implements INoteService {
                 )
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public NoteResponseWithTypeOfLikes getTypeOfNoteById(Long id) {
+        HashMap<String, Object> typeNote = noteRepository.findByIdContaining(id);
+        Long cant = (Long) typeNote.get("cant_thanks");
+        Long idNote = (Long) typeNote.get("id");
+        if (cant >= 10) return new NoteResponseWithTypeOfLikes(id, Math.toIntExact(cant), "Destacada");
+        else if (cant >=5) return new NoteResponseWithTypeOfLikes(id, Math.toIntExact(cant), "De Interes");
+        return new NoteResponseWithTypeOfLikes(id, Math.toIntExact(cant), "Normal");
+    }
 }
 
 

@@ -10,6 +10,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
+import java.util.Optional;
+import java.util.Set;
+
+
 public interface NoteRepository extends JpaRepository<Note, Long> {
 
     // NOTA: TOP 3 DE NOTAS CON MAS LIKES SEGUN AÑO
@@ -26,14 +30,20 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "group by note.id order by cant_thanks desc")
     List<HashMap<String, Object>> findTopThreeNotesMostThankedByDate(int year);
 
+
     @Query("SELECT n.createdAt from Note n where n.author.id = :author_id order by n.createdAt desc")
     List<Date> findNotByUserNoteDate(@Param("author_id") long idUser);
 
 
-
-
    @Query("SELECT count (n.id) from Note n where n.author.id = :author_id and n.createdAt between :dateBegin and  :dateEnd ")
    List<Integer> findNotByUserNoteBetweenDate(@Param("author_id") long idUser,@Param("dateBegin")  Date dateBegin,@Param("dateEnd") Date dateEnd);
+
+
+    @Query("SELECT new map(note.id as id, COUNT(note.id) as cant_thanks ) " +
+            "from Note note inner join note.thanks as thank " +
+            "where id = :id " )
+    HashMap<String, Object> findByIdContaining(long id);
+
 }
 /*
 note    thank

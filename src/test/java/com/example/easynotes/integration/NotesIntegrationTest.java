@@ -1,9 +1,11 @@
 package com.example.easynotes.integration;
 
 import com.example.easynotes.dto.NoteResponseWithCantLikesDTO;
+import com.example.easynotes.dto.NoteResponseWithTypeOfLikes;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.service.NoteService;
 import com.example.easynotes.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -80,5 +82,43 @@ public class NotesIntegrationTest {
                         content().json(expected),
                         content().contentType(MediaType.APPLICATION_JSON)
                 );
+    }
+
+    @Test
+    void testGetTypeNoteCorrectly() throws Exception {
+
+        Long id = 1l;
+        NoteResponseWithTypeOfLikes noteType = new NoteResponseWithTypeOfLikes(id,6,"De Interes");
+        String payloadJson = writer.writeValueAsString(noteType);
+
+        mockMvc.perform(get("/api/note/noteType/" + id) )
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(payloadJson),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+
+
+    }
+
+    @Test
+    void testGetTypeNoteNormalCorrectly() throws Exception {
+
+        Long id = 4L;
+        NoteResponseWithTypeOfLikes noteType = new NoteResponseWithTypeOfLikes(id,0,"Normal");
+        String payloadJson = writer.writeValueAsString(noteType);
+
+        mockMvc.perform(get("/api/note/noteType/" + id) )
+                .andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(payloadJson),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+
+
+
     }
 }

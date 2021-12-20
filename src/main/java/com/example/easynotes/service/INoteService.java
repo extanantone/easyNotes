@@ -1,9 +1,6 @@
 package com.example.easynotes.service;
 
-import com.example.easynotes.dto.NoteResponseWithCantLikesDTO;
-import com.example.easynotes.dto.ThankDTO;
-import com.example.easynotes.dto.NoteRequestDTO;
-import com.example.easynotes.dto.NoteResponseWithAuthorDTO;
+import com.example.easynotes.dto.*;
 import com.example.easynotes.model.Note;
 
 import java.util.List;
@@ -26,4 +23,6 @@ public interface INoteService {
     Set<ThankDTO> getThanks(Long id);
 
     List<NoteResponseWithCantLikesDTO> getThreeMoreThankedNotes (int year);
+
+    NoteResponseWithTypeOfLikes getTypeOfNoteById(Long id);
 }

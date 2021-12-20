@@ -21,7 +21,7 @@ public class ListMapper {
     ModelMapper modelMapper;
 
     @Autowired
-    ListMapper(ModelMapper modelMapper) {
+    public ListMapper(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
 
