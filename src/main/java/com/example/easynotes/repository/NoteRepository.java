@@ -5,11 +5,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import java.sql.Date;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 public interface NoteRepository extends JpaRepository<Note, Long> {
 
@@ -28,7 +27,13 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
     List<HashMap<String, Object>> findTopThreeNotesMostThankedByDate(int year);
 
     @Query("SELECT n.createdAt from Note n where n.author.id = :author_id order by n.createdAt desc")
-    List<LocalDate> findNotByUserNoteDate(@Param("author_id") long idUser);
+    List<Date> findNotByUserNoteDate(@Param("author_id") long idUser);
+
+
+
+
+   @Query("SELECT count (n.id) from Note n where n.author.id = :author_id and n.createdAt between :dateBegin and  :dateEnd ")
+   List<Integer> findNotByUserNoteBetweenDate(@Param("author_id") long idUser,@Param("dateBegin")  Date dateBegin,@Param("dateEnd") Date dateEnd);
 }
 /*
 note    thank

@@ -81,7 +81,7 @@ public class NoteService implements INoteService {
         Note note = modelMapper.map(noteRequestDTO, Note.class);
 
         //!FIXME
-        note.setCreatedAt(LocalDate.now());
+        //note.setCreatedAt(LocalDate.now());
         note.setUpdatedAt(LocalDate.now());
 
 
