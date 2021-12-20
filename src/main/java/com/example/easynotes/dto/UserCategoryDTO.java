@@ -5,12 +5,12 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-@Data
+
 @Getter @Setter
 @AllArgsConstructor
 public class UserCategoryDTO {
 
-  public enum cat {PublicadorDioario,PublicadorSemanal,Publicador};
+  public enum cat {PublicadorDiario,PublicadorSemanal,Publicador};
 
     private Long id;
     private String category;

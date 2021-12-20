@@ -2,6 +2,7 @@ package com.example.easynotes.integration;
 
 import com.example.easynotes.dto.NoteResponseWithCantLikesDTO;
 import com.example.easynotes.dto.NoteResponseWithTypeOfLikes;
+import com.example.easynotes.dto.UserCategoryDTO;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.service.NoteService;
 import com.example.easynotes.service.UserService;
@@ -120,5 +121,50 @@ public class NotesIntegrationTest {
 
 
 
+    }
+
+    @Test
+    void testGetCategoryPublicadorSemanal() throws Exception{
+
+        UserCategoryDTO expected = new UserCategoryDTO(2L,"PublicadorSemanal");
+        String payloadJson = writer.writeValueAsString(expected);
+        Long id = 2L;
+
+        mockMvc.perform(get("/api/user/category/"+id)).andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(payloadJson),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+    }
+
+    @Test
+    void testGetCategoryPublicadorDiario() throws Exception{
+
+        UserCategoryDTO expected = new UserCategoryDTO(3L,"PublicadorDiario");
+        String payloadJson = writer.writeValueAsString(expected);
+        Long id = 3L;
+
+        mockMvc.perform(get("/api/user/category/"+id)).andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(payloadJson),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
+    }
+
+    @Test
+    void testGetCategoryPublicador() throws Exception{
+
+        UserCategoryDTO expected = new UserCategoryDTO(1L,"Publicador");
+        String payloadJson = writer.writeValueAsString(expected);
+        Long id = 1L;
+
+        mockMvc.perform(get("/api/user/category/"+id)).andDo(print())
+                .andExpectAll(
+                        status().isOk(),
+                        content().json(payloadJson),
+                        content().contentType(MediaType.APPLICATION_JSON)
+                );
     }
 }
