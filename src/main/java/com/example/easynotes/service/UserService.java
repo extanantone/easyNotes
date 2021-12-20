@@ -233,7 +233,7 @@ public class UserService implements IUserService {
             }
         }
         if(cont==2){
-            return new UserCategoryDTO(idUser,UserCategoryDTO.cat.PublicadorDioario.toString());
+            return new UserCategoryDTO(idUser,UserCategoryDTO.cat.PublicadorDiario.toString());
         }
 
         cont=0;
