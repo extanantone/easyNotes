@@ -89,6 +89,12 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping(path = "/category/{id}")
+    public UserCategoryDTO userCategory(@PathVariable(value = "id") Long idUser){
+
+        return userService.getCatregory(idUser);
+    }
+
 
     //Metodos de Jean para HQL
 

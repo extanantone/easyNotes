@@ -52,6 +52,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
 
 
+
+
     //    // Ejemplo con like
     //    List<User> findUserByLastNameLikeAndFirstNameLike(String lastName, String firstName);
     //

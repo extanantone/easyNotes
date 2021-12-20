@@ -18,7 +18,12 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
+//import java.sql.Date;
 import java.util.stream.Collectors;
 
 
@@ -195,4 +200,77 @@ public class UserService implements IUserService {
         User user = query.getResultList().get(1);
         return modelMapper.map(user, UserResponseDTO.class);
     }
+
+
+    @Override
+    public UserCategoryDTO getCatregory(Long idUser) {
+
+        List<Date> dates = noteRepository.findNotByUserNoteDate(idUser);
+
+        List<LocalDate> ldates = dates.stream().map(d -> d.toInstant().atZone(ZoneId.systemDefault()).toLocalDate()) .collect(Collectors.toList());
+
+        LocalDate actual = LocalDate.now();
+
+       int cont = 0;
+
+       LocalDate primeraFecha= null;
+       int diadelaSemana;
+        for (LocalDate date : ldates) {
+
+            if(primeraFecha==null){
+                primeraFecha= actual.minusDays(1);
+                        continue;
+            }
+            if(primeraFecha.minusDays(1).equals(date)){
+                primeraFecha = date;
+                cont++;
+            }else{
+                break;
+            }
+
+            if(cont == 2){
+                break;
+            }
+        }
+        if(cont==2){
+            return new UserCategoryDTO(idUser,UserCategoryDTO.cat.PublicadorDioario.toString());
+        }
+
+        cont=0;
+
+        LocalDate dateBegin = actual.minusDays(7);
+
+        Date begin = java.sql.Date.valueOf(dateBegin);
+        Date actualDate = java.sql.Date.valueOf(actual);
+
+        do {
+
+           List<Integer> countnotas = noteRepository.findNotByUserNoteBetweenDate(idUser,begin,actualDate);
+
+            if(countnotas.get(0) > 0){
+                cont++;
+                dateBegin.minusDays(7);
+                actual.minusDays(7);
+
+            }else
+            {
+                break;
+            }
+
+            //countnotas =0;
+
+        }while(cont < 3);
+
+
+        if(cont>=3){
+            return new UserCategoryDTO(idUser,UserCategoryDTO.cat.PublicadorSemanal.toString());
+        }
+
+        return new UserCategoryDTO(idUser, UserCategoryDTO.cat.Publicador.toString());
+
+    }
+
+
+
+
 }

@@ -35,9 +35,9 @@ public class Note {
     Set<Thank> thanks;
 
     @Column(nullable = false, updatable = false)
-    //@Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
-    private LocalDate createdAt;
+    private Date createdAt;
 
     @Column(nullable = false)
     //@Temporal(TemporalType.TIMESTAMP)
